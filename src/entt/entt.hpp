@@ -16,6 +16,7 @@
 #include "entity/registry.hpp"
 #include "entity/runtime_view.hpp"
 #include "entity/snapshot.hpp"
+#include "entity/storage.hpp"
 #include "entity/tbr_sparse_set.hpp"
 #include "entity/tbr_storage.hpp"
 #include "entity/utility.hpp"

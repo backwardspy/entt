@@ -9,6 +9,7 @@
 #include "../core/type_traits.hpp"
 #include "../signal/sigh.hpp"
 #include "fwd.hpp"
+#include "storage.hpp"
 #include "tbr_storage.hpp"
 
 
@@ -278,6 +279,8 @@ template<typename Entity, typename Type, typename = void>
 struct pool {
     /*! @brief Resulting type after component-to-pool conversion. */
     using type = sigh_pool_mixin<storage_adapter_mixin<tbr_basic_storage<Entity, Type>>>;
+    /*! @brief Storage category. */
+    using storage_category = dense_storage_tag;
 };
 
 
