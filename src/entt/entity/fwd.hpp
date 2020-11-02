@@ -28,10 +28,6 @@ template<typename>
 class basic_runtime_view;
 
 
-template<typename...>
-class basic_group;
-
-
 template<typename>
 class basic_observer;
 
@@ -134,14 +130,6 @@ using view = basic_view<entity, Args...>;
 
 /*! @brief Alias declaration for the most common use case. */
 using runtime_view = basic_runtime_view<entity>;
-
-
-/**
- * @brief Alias declaration for the most common use case.
- * @tparam Args Other template parameters.
- */
-template<typename... Args>
-using group = basic_group<entity, Args...>;
 
 
 }
