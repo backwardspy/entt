@@ -1,5 +1,5 @@
-#ifndef ENTT_ENTITY_STORAGE_HPP
-#define ENTT_ENTITY_STORAGE_HPP
+#ifndef ENTT_ENTITY_TBR_STORAGE_HPP
+#define ENTT_ENTITY_TBR_STORAGE_HPP
 
 
 #include <algorithm>
@@ -13,7 +13,7 @@
 #include "../core/type_traits.hpp"
 #include "entity.hpp"
 #include "fwd.hpp"
-#include "sparse_set.hpp"
+#include "tbr_sparse_set.hpp"
 
 
 namespace entt {
@@ -47,15 +47,15 @@ namespace entt {
  * @tparam Type Type of objects assigned to the entities.
  */
 template<typename Entity, typename Type, typename = void>
-class basic_storage: public basic_sparse_set<Entity> {
+class tbr_basic_storage: public tbr_basic_sparse_set<Entity> {
     static_assert(std::is_move_constructible_v<Type> && std::is_move_assignable_v<Type>, "The managed type must be at least move constructible and assignable");
 
-    using underlying_type = basic_sparse_set<Entity>;
+    using underlying_type = tbr_basic_sparse_set<Entity>;
     using traits_type = entt_traits<Entity>;
 
     template<bool Const>
     class storage_iterator final {
-        friend class basic_storage<Entity, Type>;
+        friend class tbr_basic_storage<Entity, Type>;
 
         using instance_type = std::conditional_t<Const, const std::vector<Type>, std::vector<Type>>;
         using index_type = typename traits_type::difference_type;
@@ -533,10 +533,10 @@ private:
 };
 
 
-/*! @copydoc basic_storage */
+/*! @copydoc tbr_basic_storage */
 template<typename Entity, typename Type>
-class basic_storage<Entity, Type, std::enable_if_t<is_empty_v<Type>>>: public basic_sparse_set<Entity> {
-    using underlying_type = basic_sparse_set<Entity>;
+class tbr_basic_storage<Entity, Type, std::enable_if_t<is_empty_v<Type>>>: public tbr_basic_sparse_set<Entity> {
+    using underlying_type = tbr_basic_sparse_set<Entity>;
 
 public:
     /*! @brief Type of the objects associated with the entities. */

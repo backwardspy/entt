@@ -1,5 +1,5 @@
-#ifndef ENTT_ENTITY_SPARSE_SET_HPP
-#define ENTT_ENTITY_SPARSE_SET_HPP
+#ifndef ENTT_ENTITY_TBR_SPARSE_SET_HPP
+#define ENTT_ENTITY_TBR_SPARSE_SET_HPP
 
 
 #include <iterator>
@@ -39,7 +39,7 @@ namespace entt {
  * @tparam Entity A valid entity type (see entt_traits for more details).
  */
 template<typename Entity>
-class basic_sparse_set {
+class tbr_basic_sparse_set {
     static_assert(ENTT_PAGE_SIZE && ((ENTT_PAGE_SIZE & (ENTT_PAGE_SIZE - 1)) == 0), "ENTT_PAGE_SIZE must be a power of two");
     static constexpr auto entt_per_page = ENTT_PAGE_SIZE / sizeof(Entity);
 
@@ -47,7 +47,7 @@ class basic_sparse_set {
     using page_type = std::unique_ptr<Entity[]>;
 
     class sparse_set_iterator final {
-        friend class basic_sparse_set<Entity>;
+        friend class tbr_basic_sparse_set<Entity>;
 
         using packed_type = std::vector<Entity>;
         using index_type = typename traits_type::difference_type;
@@ -183,16 +183,16 @@ public:
     using reverse_iterator = const entity_type *;
 
     /*! @brief Default constructor. */
-    basic_sparse_set() = default;
+    tbr_basic_sparse_set() = default;
 
     /*! @brief Default move constructor. */
-    basic_sparse_set(basic_sparse_set &&) = default;
+    tbr_basic_sparse_set(tbr_basic_sparse_set &&) = default;
 
     /*! @brief Default destructor. */
-    virtual ~basic_sparse_set() = default;
+    virtual ~tbr_basic_sparse_set() = default;
 
     /*! @brief Default move assignment operator. @return This sparse set. */
-    basic_sparse_set & operator=(basic_sparse_set &&) = default;
+    tbr_basic_sparse_set & operator=(tbr_basic_sparse_set &&) = default;
 
     /**
      * @brief Increases the capacity of a sparse set.
@@ -593,7 +593,7 @@ public:
      *
      * @param other The sparse sets that imposes the order of the entities.
      */
-    void respect(const basic_sparse_set &other) {
+    void respect(const tbr_basic_sparse_set &other) {
         const auto to = other.end();
         auto from = other.begin();
 

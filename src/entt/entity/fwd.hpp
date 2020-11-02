@@ -9,11 +9,11 @@ namespace entt {
 
 
 template<typename>
-class basic_sparse_set;
+class tbr_basic_sparse_set;
 
 
 template<typename, typename, typename>
-class basic_storage;
+class tbr_basic_storage;
 
 
 template<typename>
@@ -61,7 +61,7 @@ enum class entity: id_type {};
 
 
 /*! @brief Alias declaration for the most common use case. */
-using sparse_set = basic_sparse_set<entity>;
+using tbr_sparse_set = tbr_basic_sparse_set<entity>;
 
 
 /**
@@ -69,7 +69,7 @@ using sparse_set = basic_sparse_set<entity>;
  * @tparam Args Other template parameters.
  */
 template<typename... Args>
-using storage = basic_storage<entity, Args...>;
+using tbr_storage = tbr_basic_storage<entity, Args...>;
 
 
 /*! @brief Alias declaration for the most common use case. */

@@ -18,8 +18,8 @@
 #include "fwd.hpp"
 #include "pool.hpp"
 #include "runtime_view.hpp"
-#include "sparse_set.hpp"
-#include "storage.hpp"
+#include "tbr_sparse_set.hpp"
+#include "tbr_storage.hpp"
 #include "utility.hpp"
 #include "view.hpp"
 
@@ -43,8 +43,8 @@ class basic_registry {
 
     struct pool_data {
         type_info info{};
-        std::unique_ptr<basic_sparse_set<Entity>> pool{};
-        void(* remove)(basic_sparse_set<Entity> &, basic_registry &, const Entity *, const Entity *){};
+        std::unique_ptr<tbr_basic_sparse_set<Entity>> pool{};
+        void(* remove)(tbr_basic_sparse_set<Entity> &, basic_registry &, const Entity *, const Entity *){};
     };
 
     struct variable_data {
@@ -63,7 +63,7 @@ class basic_registry {
         if(auto &&pdata = pools[index]; !pdata.pool) {
             pdata.info = type_id<Component>();
             pdata.pool.reset(new pool_t<Entity, Component>());
-            pdata.remove = +[](basic_sparse_set<Entity> &cpool, basic_registry &owner, const Entity *first, const Entity *last) {
+            pdata.remove = +[](tbr_basic_sparse_set<Entity> &cpool, basic_registry &owner, const Entity *first, const Entity *last) {
                 static_cast<pool_t<Entity, Component> &>(cpool).remove(owner, first, last);
             };
         }
@@ -895,7 +895,7 @@ public:
             }
         } else {
             ([this](auto &&cpool) {
-                cpool.remove(*this, cpool.basic_sparse_set<entity_type>::begin(), cpool.basic_sparse_set<entity_type>::end());
+                cpool.remove(*this, cpool.tbr_basic_sparse_set<entity_type>::begin(), cpool.tbr_basic_sparse_set<entity_type>::end());
             }(assure<Component>()), ...);
         }
     }
@@ -1109,8 +1109,8 @@ public:
      */
     template<typename ItComp, typename ItExcl = id_type *>
     [[nodiscard]] basic_runtime_view<Entity> runtime_view(ItComp first, ItComp last, ItExcl from = {}, ItExcl to = {}) const {
-        std::vector<const basic_sparse_set<Entity> *> component(std::distance(first, last));
-        std::vector<const basic_sparse_set<Entity> *> filter(std::distance(from, to));
+        std::vector<const tbr_basic_sparse_set<Entity> *> component(std::distance(first, last));
+        std::vector<const tbr_basic_sparse_set<Entity> *> filter(std::distance(from, to));
 
         std::transform(first, last, component.begin(), [this](const auto ctype) {
             const auto it = std::find_if(pools.cbegin(), pools.cend(), [ctype](auto &&pdata) { return pdata.pool && pdata.info.hash() == ctype; });

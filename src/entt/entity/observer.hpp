@@ -11,7 +11,7 @@
 #include "../core/type_traits.hpp"
 #include "../signal/delegate.hpp"
 #include "registry.hpp"
-#include "storage.hpp"
+#include "tbr_storage.hpp"
 #include "utility.hpp"
 #include "entity.hpp"
 #include "fwd.hpp"
@@ -276,7 +276,7 @@ public:
     /*! @brief Unsigned integer type. */
     using size_type = std::size_t;
     /*! @brief Random access iterator type. */
-    using iterator = typename basic_sparse_set<Entity>::iterator;
+    using iterator = typename tbr_basic_sparse_set<Entity>::iterator;
 
     /*! @brief Default constructor. */
     basic_observer()
@@ -377,7 +377,7 @@ public:
      * @return An iterator to the first entity of the observer.
      */
     [[nodiscard]] iterator begin() const ENTT_NOEXCEPT {
-        return view.basic_sparse_set<entity_type>::begin();
+        return view.tbr_basic_sparse_set<entity_type>::begin();
     }
 
     /**
@@ -391,7 +391,7 @@ public:
      * observer.
      */
     [[nodiscard]] iterator end() const ENTT_NOEXCEPT {
-        return view.basic_sparse_set<entity_type>::end();
+        return view.tbr_basic_sparse_set<entity_type>::end();
     }
 
     /*! @brief Clears the underlying container. */
@@ -436,7 +436,7 @@ public:
 
 private:
     delegate<void(basic_observer &)> release;
-    basic_storage<entity_type, payload_type> view;
+    tbr_basic_storage<entity_type, payload_type> view;
 };
 
 
