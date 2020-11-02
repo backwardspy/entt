@@ -16,8 +16,8 @@
 #include "../core/type_info.hpp"
 #include "entity.hpp"
 #include "fwd.hpp"
-#include "pool.hpp"
 #include "runtime_view.hpp"
+#include "storage.hpp"
 #include "tbr_sparse_set.hpp"
 #include "tbr_storage.hpp"
 #include "utility.hpp"
@@ -53,7 +53,7 @@ class basic_registry {
     };
 
     template<typename Component>
-    [[nodiscard]] const pool_t<Entity, Component> & assure() const {
+    [[nodiscard]] const storage_t<Entity, Component> & assure() const {
         const auto index = type_seq<Component>::value();
 
         if(!(index < pools.size())) {
@@ -62,18 +62,18 @@ class basic_registry {
 
         if(auto &&pdata = pools[index]; !pdata.pool) {
             pdata.info = type_id<Component>();
-            pdata.pool.reset(new pool_t<Entity, Component>());
+            pdata.pool.reset(new storage_t<Entity, Component>());
             pdata.remove = +[](tbr_basic_sparse_set<Entity> &cpool, basic_registry &owner, const Entity *first, const Entity *last) {
-                static_cast<pool_t<Entity, Component> &>(cpool).remove(owner, first, last);
+                static_cast<storage_t<Entity, Component> &>(cpool).remove(owner, first, last);
             };
         }
 
-        return static_cast<const pool_t<Entity, Component> &>(*pools[index].pool);
+        return static_cast<const storage_t<Entity, Component> &>(*pools[index].pool);
     }
 
     template<typename Component>
-    [[nodiscard]] pool_t<Entity, Component> & assure() {
-        return const_cast<pool_t<Entity, Component> &>(std::as_const(*this).template assure<Component>());
+    [[nodiscard]] storage_t<Entity, Component> & assure() {
+        return const_cast<storage_t<Entity, Component> &>(std::as_const(*this).template assure<Component>());
     }
 
     Entity generate_identifier() {
