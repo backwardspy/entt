@@ -360,9 +360,7 @@ public:
      *
      * @warning
      * Attempting to get the position of an entity that doesn't belong to the
-     * sparse set results in undefined behavior.<br/>
-     * An assertion will abort the execution at runtime in debug mode if the
-     * sparse set doesn't contain the given entity.
+     * sparse set results in undefined behavior.
      *
      * @param entt A valid entity identifier.
      * @return The position of the entity in the sparse set.
@@ -377,9 +375,7 @@ public:
      *
      * @warning
      * Attempting to assign an entity that already belongs to the sparse set
-     * results in undefined behavior.<br/>
-     * An assertion will abort the execution at runtime in debug mode if the
-     * sparse set already contains the given entity.
+     * results in undefined behavior.
      *
      * @param entt A valid entity identifier.
      */
@@ -394,9 +390,7 @@ public:
      *
      * @warning
      * Attempting to assign an entity that already belongs to the sparse set
-     * results in undefined behavior.<br/>
-     * An assertion will abort the execution at runtime in debug mode if the
-     * sparse set already contains the given entity.
+     * results in undefined behavior.
      *
      * @tparam It Type of input iterator.
      * @param first An iterator to the first element of the range of entities.
@@ -418,9 +412,7 @@ public:
      *
      * @warning
      * Attempting to remove an entity that doesn't belong to the sparse set
-     * results in undefined behavior.<br/>
-     * An assertion will abort the execution at runtime in debug mode if the
-     * sparse set doesn't contain the given entity.
+     * results in undefined behavior.
      *
      * @param entt A valid entity identifier.
      */
@@ -460,9 +452,7 @@ public:
      *
      * @warning
      * Attempting to swap entities that don't belong to the sparse set results
-     * in undefined behavior.<br/>
-     * An assertion will abort the execution at runtime in debug mode if the
-     * sparse set doesn't contain the given entities.
+     * in undefined behavior.
      *
      * @param lhs A valid entity identifier.
      * @param rhs A valid entity identifier.

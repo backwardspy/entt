@@ -433,9 +433,7 @@ public:
      * @warning
      * Attempting to use an invalid component type results in a compilation
      * error. Attempting to use an entity that doesn't belong to the view
-     * results in undefined behavior.<br/>
-     * An assertion will abort the execution at runtime in debug mode if the
-     * view doesn't contain the given entity.
+     * results in undefined behavior.
      *
      * @tparam Comp Types of components to get.
      * @param entt A valid entity identifier.
@@ -880,9 +878,7 @@ public:
      * @warning
      * Attempting to use an invalid component type results in a compilation
      * error. Attempting to use an entity that doesn't belong to the view
-     * results in undefined behavior.<br/>
-     * An assertion will abort the execution at runtime in debug mode if the
-     * view doesn't contain the given entity.
+     * results in undefined behavior.
      *
      * @tparam Comp Types of components to get.
      * @param entt A valid entity identifier.
