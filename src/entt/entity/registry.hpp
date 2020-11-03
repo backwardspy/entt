@@ -228,34 +228,6 @@ public:
     }
 
     /**
-     * @brief Direct access to the list of components of a given pool.
-     *
-     * The returned pointer is such that range
-     * `[raw<Component>(), raw<Component>() + size<Component>())` is always a
-     * valid range, even if the container is empty.
-     *
-     * Components are in the reverse order as imposed by the sorting
-     * functionalities.
-     *
-     * @note
-     * Empty components aren't explicitly instantiated. Therefore, this function
-     * isn't available for them. A compilation error will occur if invoked.
-     *
-     * @tparam Component Type of component in which one is interested.
-     * @return A pointer to the array of components of the given type.
-     */
-    template<typename Component>
-    [[nodiscard]] const Component * raw() const {
-        return assure<Component>().raw();
-    }
-
-    /*! @copydoc raw */
-    template<typename Component>
-    [[nodiscard]] Component * raw() {
-        return const_cast<Component *>(std::as_const(*this).template raw<Component>());
-    }
-
-    /**
      * @brief Direct access to the list of entities of a given pool.
      *
      * The returned pointer is such that range

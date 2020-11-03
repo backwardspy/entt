@@ -298,15 +298,15 @@ TEST(Registry, RawData) {
 
     const auto entity = registry.create();
 
-    ASSERT_EQ(registry.raw<int>(), nullptr);
-    ASSERT_EQ(std::as_const(registry).raw<int>(), nullptr);
+    ASSERT_EQ(registry.view<int>().raw(), nullptr);
+    ASSERT_EQ(std::as_const(registry).view<const int>().raw(), nullptr);
     ASSERT_EQ(std::as_const(registry).data<int>(), nullptr);
     ASSERT_EQ(*std::as_const(registry).data(), entity);
 
     registry.emplace<int>(entity, 42);
 
-    ASSERT_EQ(*registry.raw<int>(), 42);
-    ASSERT_EQ(*std::as_const(registry).raw<int>(), 42);
+    ASSERT_EQ(*registry.view<int>().raw(), 42);
+    ASSERT_EQ(*std::as_const(registry).view<const int>().raw(), 42);
     ASSERT_EQ(*std::as_const(registry).data<int>(), entity);
 
     const auto other = registry.create();
