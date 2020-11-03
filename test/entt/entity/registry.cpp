@@ -109,8 +109,8 @@ TEST(Registry, Functionalities) {
     ASSERT_EQ(registry.capacity(), 42u);
     ASSERT_EQ(registry.capacity<int>(), 8u);
     ASSERT_EQ(registry.capacity<char>(), 8u);
-    ASSERT_EQ(registry.size<int>(), 0u);
-    ASSERT_EQ(registry.size<char>(), 0u);
+    ASSERT_EQ(registry.view<int>().size(), 0u);
+    ASSERT_EQ(registry.view<char>().size(), 0u);
     ASSERT_TRUE((registry.empty<int, char>()));
 
     registry.prepare<double>();
@@ -124,8 +124,8 @@ TEST(Registry, Functionalities) {
     ASSERT_TRUE(registry.has<>(e0));
     ASSERT_FALSE(registry.any<>(e1));
 
-    ASSERT_EQ(registry.size<int>(), 1u);
-    ASSERT_EQ(registry.size<char>(), 1u);
+    ASSERT_EQ(registry.view<int>().size(), 1u);
+    ASSERT_EQ(registry.view<char>().size(), 1u);
     ASSERT_FALSE(registry.empty<int>());
     ASSERT_FALSE(registry.empty<char>());
 
@@ -215,8 +215,8 @@ TEST(Registry, Functionalities) {
     ASSERT_EQ(registry.get_or_emplace<int>(e3, 3), 3);
     ASSERT_EQ(registry.get_or_emplace<char>(e3, 'c'), 'c');
 
-    ASSERT_EQ(registry.size<int>(), 1u);
-    ASSERT_EQ(registry.size<char>(), 1u);
+    ASSERT_EQ(registry.view<int>().size(), 1u);
+    ASSERT_EQ(registry.view<char>().size(), 1u);
     ASSERT_FALSE(registry.empty<int>());
     ASSERT_FALSE(registry.empty<char>());
     ASSERT_TRUE((registry.has<int, char>(e3)));
@@ -225,15 +225,15 @@ TEST(Registry, Functionalities) {
 
     ASSERT_NO_THROW(registry.clear<int>());
 
-    ASSERT_EQ(registry.size<int>(), 0u);
-    ASSERT_EQ(registry.size<char>(), 1u);
+    ASSERT_EQ(registry.view<int>().size(), 0u);
+    ASSERT_EQ(registry.view<char>().size(), 1u);
     ASSERT_TRUE(registry.empty<int>());
     ASSERT_FALSE(registry.empty<char>());
 
     ASSERT_NO_THROW(registry.clear());
 
-    ASSERT_EQ(registry.size<int>(), 0u);
-    ASSERT_EQ(registry.size<char>(), 0u);
+    ASSERT_EQ(registry.view<int>().size(), 0u);
+    ASSERT_EQ(registry.view<char>().size(), 0u);
     ASSERT_TRUE((registry.empty<int, char>()));
 
     const auto e4 = registry.create();
@@ -244,8 +244,8 @@ TEST(Registry, Functionalities) {
     ASSERT_EQ(registry.remove_if_exists<int>(e4), 1u);
     ASSERT_EQ(registry.remove_if_exists<int>(e5), 0u);
 
-    ASSERT_EQ(registry.size<int>(), 0u);
-    ASSERT_EQ(registry.size<char>(), 0u);
+    ASSERT_EQ(registry.view<int>().size(), 0u);
+    ASSERT_EQ(registry.view<char>().size(), 0u);
     ASSERT_TRUE(registry.empty<int>());
 
     ASSERT_EQ(registry.capacity<int>(), 8u);
@@ -871,7 +871,7 @@ TEST(Registry, Insert) {
     registry.clear<float>();
     float value[3]{0.f, 1.f, 2.f};
     const auto single_view = registry.view<int>();
-    registry.insert<float>(single_view.data(), single_view.data() + single_view.size(), value, value + registry.size<int>());
+    registry.insert<float>(single_view.data(), single_view.data() + single_view.size(), value, value + single_view.size());
 
     ASSERT_EQ(registry.get<float>(e0), 0.f);
     ASSERT_EQ(registry.get<float>(e1), 1.f);
