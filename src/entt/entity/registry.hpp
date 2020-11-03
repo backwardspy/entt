@@ -668,7 +668,7 @@ public:
     template<typename... Component>
     [[nodiscard]] bool has(const entity_type entity) const {
         ENTT_ASSERT(valid(entity));
-        return (assure<Component>().contains(entity) && ...);
+        return this->view<std::add_const_t<Component>...>().contains(entity);
     }
 
     /**
@@ -702,24 +702,14 @@ public:
     template<typename... Component>
     [[nodiscard]] decltype(auto) get([[maybe_unused]] const entity_type entity) const {
         ENTT_ASSERT(valid(entity));
-
-        if constexpr(sizeof...(Component) == 1) {
-            return (assure<Component>().get(entity), ...);
-        } else {
-            return std::forward_as_tuple(get<Component>(entity)...);
-        }
+        return this->view<std::add_const_t<Component>...>().get<std::add_const_t<Component>...>(entity);
     }
 
     /*! @copydoc get */
     template<typename... Component>
     [[nodiscard]] decltype(auto) get([[maybe_unused]] const entity_type entity) {
         ENTT_ASSERT(valid(entity));
-
-        if constexpr(sizeof...(Component) == 1) {
-            return (assure<Component>().get(entity), ...);
-        } else {
-            return std::forward_as_tuple(get<Component>(entity)...);
-        }
+        return this->view<Component...>().get<Component...>(entity);
     }
 
     /**
@@ -980,14 +970,14 @@ public:
      */
     template<typename... Component, typename... Exclude>
     [[nodiscard]] basic_view<Entity, exclude_t<Exclude...>, Component...> view(exclude_t<Exclude...> = {}) const {
-        static_assert(sizeof...(Component) > 0, "Exclusion-only views are not supported");
+        static_assert(sizeof...(Component) > 0 || sizeof...(Exclude) == 0, "Exclusion-only views are not supported");
         return { assure<std::decay_t<Component>>()..., assure<Exclude>()... };
     }
 
     /*! @copydoc view */
     template<typename... Component, typename... Exclude>
     [[nodiscard]] basic_view<Entity, exclude_t<Exclude...>, Component...> view(exclude_t<Exclude...> = {}) {
-        static_assert(sizeof...(Component) > 0, "Exclusion-only views are not supported");
+        static_assert(sizeof...(Component) > 0 || sizeof...(Exclude) == 0, "Exclusion-only views are not supported");
         return { assure<std::decay_t<Component>>()..., assure<Exclude>()... };
     }
 

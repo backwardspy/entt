@@ -227,9 +227,13 @@ class basic_view<Entity, exclude_t<Exclude...>, Component...> final {
     {}
 
     [[nodiscard]] const tbr_basic_sparse_set<Entity> * candidate() const ENTT_NOEXCEPT {
-        return (std::min)({ static_cast<const tbr_basic_sparse_set<Entity> *>(std::get<storage_t<Entity, Component> *>(pools))... }, [](const auto *lhs, const auto *rhs) {
-            return lhs->size() < rhs->size();
-        });
+        if constexpr(sizeof...(Component) == 0) {
+            return nullptr;
+        } else {
+            return (std::min)({ static_cast<const tbr_basic_sparse_set<Entity> *>(std::get<storage_t<Entity, Component> *>(pools))... }, [](const auto *lhs, const auto *rhs) {
+                return lhs->size() < rhs->size();
+            });
+        }
     }
 
     [[nodiscard]] unchecked_type unchecked(const tbr_basic_sparse_set<Entity> *cpool) const {
