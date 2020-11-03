@@ -228,24 +228,6 @@ public:
     }
 
     /**
-     * @brief Direct access to the list of entities of a given pool.
-     *
-     * The returned pointer is such that range
-     * `[data<Component>(), data<Component>() + size<Component>())` is always a
-     * valid range, even if the container is empty.
-     *
-     * Entities are in the reverse order as imposed by the sorting
-     * functionalities.
-     *
-     * @tparam Component Type of component in which one is interested.
-     * @return A pointer to the array of entities.
-     */
-    template<typename Component>
-    [[nodiscard]] const entity_type * data() const {
-        return assure<Component>().data();
-    }
-
-    /**
      * @brief Direct access to the list of entities of a registry.
      *
      * The returned pointer is such that range `[data(), data() + size())` is

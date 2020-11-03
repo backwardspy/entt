@@ -3,12 +3,13 @@
 
 
 #include <array>
-#include <vector>
 #include <cstddef>
-#include <utility>
 #include <iterator>
+#include <tuple>
 #include <type_traits>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 #include "../config/config.h"
 #include "entity.hpp"
 #include "fwd.hpp"
@@ -120,7 +121,14 @@ public:
      */
     template<typename... Component, typename Archive>
     const basic_snapshot & component(Archive &archive) const {
-        (component<Component>(archive, reg->template data<Component>(), reg->template data<Component>() + reg->template size<Component>()), ...);
+        ([&archive](const auto &view) {
+            archive(typename traits_type::entity_type(view.size()));
+            const auto each = view.each();
+
+            for(auto first = each.rbegin(), last = each.rend(); first != last; ++first) {
+                std::apply(archive, *first);
+            }
+        }(reg->template view<std::add_const_t<Component>>()), ...);
         return *this;
     }
 
