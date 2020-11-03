@@ -910,14 +910,12 @@ A general purpose cloning function could be defined as:
 ```cpp
 template<typename Type>
 void clone(const entt::registry &from, entt::registry &to) {
-    const auto *data = from.data<Type>();
-    const auto size = from.size<Type>();
+    const auto view = from.view<Type>();
 
     if constexpr(ENTT_IS_EMPTY(Type)) {
-        to.insert<Type>(data, data + size);
+        to.insert<Type>(view.data(), view.data() + view.size());
     } else {
-        const auto *raw = from.raw<Type>();
-        to.insert<Type>(data, data + size, raw, raw + size);
+        to.insert<Type>(view.data(), view.data() + view.size(), view.raw(), view.raw() + view.size());
     }
 }
 ```
@@ -930,12 +928,12 @@ between type identifiers and opaque methods for cloning:
 
 ```cpp
 using clone_fn_type = void(const entt::registry &, entt::registry &);
-std::unordered_map<entt::id_type, clone_fn_type *> clone_functions;
+std::unordered_map<entt::type_info, clone_fn_type *> clone_functions;
 
 // ...
 
-clone_functions[entt::type_hash<position>::value()] = &clone<position>;
-clone_functions[entt::type_hash<velocity>::value()] = &clone<velocity>;
+clone_functions[entt::type_id<position>()] = &clone<position>;
+clone_functions[entt::type_id<velocity>()] = &clone<velocity>;
 ```
 
 Stamping a registry becomes straightforward with such a mapping then:
@@ -946,8 +944,8 @@ entt::registry to;
 
 // ...
 
-from.visit([this, &to](const auto type_id) {
-    clone_functions[type_id](from, to);
+from.visit([this, &to](const auto info) {
+    clone_functions[info](from, to);
 });
 ```
 
@@ -992,12 +990,12 @@ dedicate system:
 
 ```cpp
 using stamp_fn_type = void(const entt::registry &, const entt::entity, entt::registry &, const entt::entity);
-std::unordered_map<entt::id_type, stamp_fn_type *> stamp_functions;
+std::unordered_map<entt::type_info, stamp_fn_type *> stamp_functions;
 
 // ...
 
-stamp_functions[entt::type_hash<position>::value()] = &stamp<position>;
-stamp_functions[entt::type_hash<velocity>::value()] = &stamp<velocity>;
+stamp_functions[entt::type_id<position>()] = &stamp<position>;
+stamp_functions[entt::type_id<velocity>()] = &stamp<velocity>;
 ```
 
 Then _stamp_ entities across different registries as:
@@ -1008,8 +1006,8 @@ entt::registry to;
 
 // ...
 
-from.visit(src, [this, &to, dst](const auto type_id) {
-    stamp_functions[type_id](from, src, to, dst);
+from.visit(src, [this, &to, dst](const auto info) {
+    stamp_functions[info](from, src, to, dst);
 });
 ```
 
